@@ -60,6 +60,41 @@ export const FALLBACK_RECOMMENDED_OLLAMA_MODELS: NomadOllamaModel[] = [
       },
     ],
   },
+  {
+    name: 'qwen3',
+    description:
+      'Qwen3 is the latest generation of large language models from Alibaba, with strong reasoning and multilingual support across 100+ languages.',
+    estimated_pulls: '12.5M',
+    id: 'f4d2a7b1-9e3c-4d8a-b5f6-1a2b3c4d5e6f',
+    first_seen: '2026-01-28T23:37:31.000+00:00',
+    model_last_updated: '2 months ago',
+    tags: [
+      {
+        name: 'qwen3:32b',
+        size: '20 GB',
+        context: '40k',
+        input: 'Text',
+        cloud: false,
+        thinking: true
+      },
+      {
+        name: 'qwen3:14b',
+        size: '9.3 GB',
+        context: '40k',
+        input: 'Text',
+        cloud: false,
+        thinking: true
+      },
+      {
+        name: 'qwen3:8b',
+        size: '5.2 GB',
+        context: '40k',
+        input: 'Text',
+        cloud: false,
+        thinking: true
+      },
+    ],
+  },
 ]
 
 export const DEFAULT_QUERY_REWRITE_MODEL = 'qwen2.5:3b' // default to qwen2.5 for query rewriting with good balance of text task performance and resource usage
