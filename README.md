@@ -1,29 +1,48 @@
 <div align="center">
 <img src="https://raw.githubusercontent.com/Crosstalk-Solutions/project-nomad/refs/heads/main/admin/public/project_nomad_logo.png" width="200" height="200"/>
 
-# Project N.O.M.A.D.
+# Project N.O.M.A.D. (AMD Fork)
 ### Node for Offline Media, Archives, and Data
 
 **Knowledge That Never Goes Offline**
 
+[![Upstream](https://img.shields.io/badge/Upstream-Crosstalk%20Solutions-blue)](https://github.com/Crosstalk-Solutions/project-nomad)
 [![Website](https://img.shields.io/badge/Website-projectnomad.us-blue)](https://www.projectnomad.us)
 [![Discord](https://img.shields.io/badge/Discord-Join%20Community-5865F2)](https://discord.com/invite/crosstalksolutions)
-[![Benchmark](https://img.shields.io/badge/Benchmark-Leaderboard-green)](https://benchmark.projectnomad.us)
 
 </div>
 
 ---
 
-Project N.O.M.A.D. is a self-contained, offline-first knowledge and education server packed with critical tools, knowledge, and AI to keep you informed and empowered—anytime, anywhere.
+This is an AMD/ROCm-focused fork of [Project N.O.M.A.D.](https://github.com/Crosstalk-Solutions/project-nomad) — a self-contained, offline-first knowledge and education server packed with critical tools, knowledge, and AI.
+
+### Fork Changes
+
+**AMD ROCm GPU Support**
+- Ollama automatically uses the `ollama/ollama:rocm` image when an AMD GPU is detected
+- `/dev/kfd` and `/dev/dri/*` device passthrough for GPU acceleration
+- Install script validates AMD device nodes and adds user to `video`/`render` groups
+- GPU verification reports AMD ROCm status alongside NVIDIA
+
+**Theme Selector**
+- 5 themes: Desert (default), Sci-Fi, Kawaii, Space, Cyberpunk
+- Settings > Appearance page with visual theme cards
+- Persisted server-side via KV store + localStorage for instant load
+
+**Expanded Recommended Models**
+- Qwen3 (32b, 14b, 8b) added to the recommended/fallback model list
+
+**Snap Docker Compatibility**
+- Install script handles both systemd and snap-installed Docker
 
 ## Installation & Quickstart
 Project N.O.M.A.D. can be installed on any Debian-based operating system (we recommend Ubuntu). Installation is completely terminal-based, and all tools and resources are designed to be accessed through the browser, so there's no need for a desktop environment if you'd rather setup N.O.M.A.D. as a "server" and access it through other clients.
 
 *Note: sudo/root privileges are required to run the install script*
 
-#### Quick Install
+#### Quick Install (AMD Fork)
 ```bash
-sudo apt-get update && sudo apt-get install -y curl && curl -fsSL https://raw.githubusercontent.com/Crosstalk-Solutions/project-nomad/refs/heads/main/install/install_nomad.sh -o install_nomad.sh && sudo bash install_nomad.sh
+sudo apt-get update && sudo apt-get install -y curl && curl -fsSL https://raw.githubusercontent.com/AnarchySC/project-nomad/refs/heads/main/install/install_nomad.sh -o install_nomad.sh && sudo bash install_nomad.sh
 ```
 
 Project N.O.M.A.D. is now installed on your device! Open a browser and navigate to `http://localhost:8080` (or `http://DEVICE_IP:8080`) to start exploring!
@@ -75,7 +94,7 @@ To run LLM's and other included AI tools:
 #### Optimal Specs
 - Processor: AMD Ryzen 7 or Intel Core i7 or better
 - RAM: 32 GB system memory
-- Graphics: NVIDIA RTX 3060 or AMD equivalent or better (more VRAM = run larger models)
+- Graphics: AMD RX 7000/6000 series (ROCm) or NVIDIA RTX 3060+ (more VRAM = run larger models)
 - Storage: At least 250 GB free disk space (preferably on SSD)
 - OS: Debian-based (Ubuntu recommended)
 - Stable internet connection (required during install only)
@@ -164,5 +183,5 @@ sudo bash /opt/project-nomad/update_nomad.sh
 
 ###### Uninstall Script - Need to start fresh? Use the uninstall script to make your life easy. Note: this cannot be undone!
 ```bash
-curl -fsSL https://raw.githubusercontent.com/Crosstalk-Solutions/project-nomad/refs/heads/main/install/uninstall_nomad.sh -o uninstall_nomad.sh && sudo bash uninstall_nomad.sh
+curl -fsSL https://raw.githubusercontent.com/AnarchySC/project-nomad/refs/heads/main/install/uninstall_nomad.sh -o uninstall_nomad.sh && sudo bash uninstall_nomad.sh
 ```
