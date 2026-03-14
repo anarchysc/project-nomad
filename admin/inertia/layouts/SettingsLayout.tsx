@@ -8,7 +8,8 @@ import {
   IconSettings,
   IconTerminal2,
   IconWand,
-  IconZoom
+  IconZoom,
+  IconPalette
 } from '@tabler/icons-react'
 import { usePage } from '@inertiajs/react'
 import StyledSidebar from '~/components/StyledSidebar'
@@ -40,6 +41,7 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
       icon: IconArrowBigUpLines,
       current: false,
     },
+    { name: 'Appearance', href: '/settings/appearance', icon: IconPalette, current: false },
     { name: 'System', href: '/settings/system', icon: IconSettings, current: false },
     { name: 'Legal Notices', href: '/settings/legal', icon: IconGavel, current: false },
   ]

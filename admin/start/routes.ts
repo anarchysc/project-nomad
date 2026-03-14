@@ -54,6 +54,7 @@ router
     router.get('/zim', [SettingsController, 'zim'])
     router.get('/zim/remote-explorer', [SettingsController, 'zimRemote'])
     router.get('/benchmark', [SettingsController, 'benchmark'])
+    router.on('/appearance').renderInertia('settings/appearance')
   })
   .prefix('/settings')
 

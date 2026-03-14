@@ -39,3 +39,178 @@
 body {
   background-color: var(--color-desert-sand);
 }
+
+/* ═══════════════════════════════════════════
+   Theme: Sci-Fi
+   Cool steel blue, holographic cyan accents
+   ═══════════════════════════════════════════ */
+[data-theme="sci-fi"] {
+  --color-desert-white: #e8edf2;
+  --color-desert-sand: #1a2332;
+
+  --color-desert-green-darker: #0a1628;
+  --color-desert-green-dark: #0d1f3c;
+  --color-desert-green: #00b4d8;
+  --color-desert-green-light: #1b3a5c;
+  --color-desert-green-lighter: #2a4a6c;
+
+  --color-desert-orange-dark: #0077b6;
+  --color-desert-orange: #00b4d8;
+  --color-desert-orange-light: #48cae4;
+  --color-desert-orange-lighter: #90e0ef;
+
+  --color-desert-tan-dark: #8899aa;
+  --color-desert-tan: #a0b0c0;
+  --color-desert-tan-light: #b8c8d8;
+  --color-desert-tan-lighter: #d0dde8;
+
+  --color-desert-red-dark: #e63946;
+  --color-desert-red: #ff4d5a;
+  --color-desert-red-light: #ff6b75;
+  --color-desert-red-lighter: #ff9da4;
+
+  --color-desert-olive-dark: #006d77;
+  --color-desert-olive: #0097a7;
+  --color-desert-olive-light: #00bcd4;
+  --color-desert-olive-lighter: #4dd0e1;
+
+  --color-desert-stone-dark: #546e7a;
+  --color-desert-stone: #78909c;
+  --color-desert-stone-light: #90a4ae;
+  --color-desert-stone-lighter: #b0bec5;
+}
+
+[data-theme="sci-fi"] body,
+body[data-theme="sci-fi"] {
+  color: #cad8e8;
+}
+
+/* ═══════════════════════════════════════════
+   Theme: Kawaii
+   Pastel pink, lavender, soft mint
+   ═══════════════════════════════════════════ */
+[data-theme="kawaii"] {
+  --color-desert-white: #fef6ff;
+  --color-desert-sand: #fff0f5;
+
+  --color-desert-green-darker: #7b2d5f;
+  --color-desert-green-dark: #9b3d7a;
+  --color-desert-green: #e875a8;
+  --color-desert-green-light: #f5c6dc;
+  --color-desert-green-lighter: #fce4ec;
+
+  --color-desert-orange-dark: #ab47bc;
+  --color-desert-orange: #ce93d8;
+  --color-desert-orange-light: #e1bee7;
+  --color-desert-orange-lighter: #f3e5f5;
+
+  --color-desert-tan-dark: #b07da0;
+  --color-desert-tan: #c99dbb;
+  --color-desert-tan-light: #e0bdd4;
+  --color-desert-tan-lighter: #f0dde9;
+
+  --color-desert-red-dark: #e57373;
+  --color-desert-red: #ef9a9a;
+  --color-desert-red-light: #f8bbd0;
+  --color-desert-red-lighter: #fce4ec;
+
+  --color-desert-olive-dark: #66bb6a;
+  --color-desert-olive: #81c784;
+  --color-desert-olive-light: #a5d6a7;
+  --color-desert-olive-lighter: #c8e6c9;
+
+  --color-desert-stone-dark: #b39dba;
+  --color-desert-stone: #ccb8d2;
+  --color-desert-stone-light: #deccdf;
+  --color-desert-stone-lighter: #f0e4f0;
+}
+
+/* ═══════════════════════════════════════════
+   Theme: Space
+   Deep void black, starfield navy, purple nebula
+   ═══════════════════════════════════════════ */
+[data-theme="space"] {
+  --color-desert-white: #e0d6f0;
+  --color-desert-sand: #0b0d17;
+
+  --color-desert-green-darker: #06060f;
+  --color-desert-green-dark: #0d0f22;
+  --color-desert-green: #7c4dff;
+  --color-desert-green-light: #1a1a3e;
+  --color-desert-green-lighter: #2a2a55;
+
+  --color-desert-orange-dark: #aa00ff;
+  --color-desert-orange: #d500f9;
+  --color-desert-orange-light: #e040fb;
+  --color-desert-orange-lighter: #ea80fc;
+
+  --color-desert-tan-dark: #7986cb;
+  --color-desert-tan: #9fa8da;
+  --color-desert-tan-light: #b8c0e8;
+  --color-desert-tan-lighter: #d1d9f0;
+
+  --color-desert-red-dark: #ff1744;
+  --color-desert-red: #ff5252;
+  --color-desert-red-light: #ff7979;
+  --color-desert-red-lighter: #ffaaaa;
+
+  --color-desert-olive-dark: #304ffe;
+  --color-desert-olive: #536dfe;
+  --color-desert-olive-light: #7b8fff;
+  --color-desert-olive-lighter: #a5b0ff;
+
+  --color-desert-stone-dark: #4a4a6a;
+  --color-desert-stone: #6a6a8a;
+  --color-desert-stone-light: #8888a8;
+  --color-desert-stone-lighter: #aaaacc;
+}
+
+[data-theme="space"] body,
+body[data-theme="space"] {
+  color: #c8c0e0;
+}
+
+/* ═══════════════════════════════════════════
+   Theme: Cyberpunk
+   Dark charcoal, neon magenta/cyan, electric yellow
+   ═══════════════════════════════════════════ */
+[data-theme="cyberpunk"] {
+  --color-desert-white: #f0e6ff;
+  --color-desert-sand: #121212;
+
+  --color-desert-green-darker: #0a0a0a;
+  --color-desert-green-dark: #1a1a2e;
+  --color-desert-green: #ff2a6d;
+  --color-desert-green-light: #2a1a2e;
+  --color-desert-green-lighter: #3a2a3e;
+
+  --color-desert-orange-dark: #d4a800;
+  --color-desert-orange: #ffdd00;
+  --color-desert-orange-light: #ffe644;
+  --color-desert-orange-lighter: #fff176;
+
+  --color-desert-tan-dark: #8a8a8a;
+  --color-desert-tan: #a0a0a0;
+  --color-desert-tan-light: #b8b8b8;
+  --color-desert-tan-lighter: #d0d0d0;
+
+  --color-desert-red-dark: #c2185b;
+  --color-desert-red: #ff2a6d;
+  --color-desert-red-light: #ff5a8a;
+  --color-desert-red-lighter: #ff8ab0;
+
+  --color-desert-olive-dark: #00b8d4;
+  --color-desert-olive: #00e5ff;
+  --color-desert-olive-light: #40efff;
+  --color-desert-olive-lighter: #80f4ff;
+
+  --color-desert-stone-dark: #4a4a5a;
+  --color-desert-stone: #6a6a7a;
+  --color-desert-stone-light: #8a8a9a;
+  --color-desert-stone-lighter: #aaaabc;
+}
+
+[data-theme="cyberpunk"] body,
+body[data-theme="cyberpunk"] {
+  color: #e0d6f0;
+}
