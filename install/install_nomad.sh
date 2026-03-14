@@ -187,18 +187,28 @@ ensure_docker_installed() {
   else
     echo -e "${GREEN}#${RESET} Docker is already installed.\\n"
     
-    # Check if Docker service is running
-    if ! systemctl is-active --quiet docker; then
+    # Check if Docker service is running (support both systemd and snap installs)
+    if docker info &> /dev/null; then
+      echo -e "${GREEN}#${RESET} Docker service is already running.\\n"
+    else
       echo -e "${YELLOW}#${RESET} Docker is installed but not running. Attempting to start Docker...\\n"
-      sudo systemctl start docker
-      if ! systemctl is-active --quiet docker; then
+      # Try systemd first, then snap
+      if systemctl is-active --quiet docker 2>/dev/null; then
+        echo -e "${GREEN}#${RESET} Docker service is already running.\\n"
+      elif sudo systemctl start docker 2>/dev/null; then
+        echo -e "${GREEN}#${RESET} Docker service started successfully (systemd).\\n"
+      elif sudo snap start docker.dockerd 2>/dev/null; then
+        sleep 2
+        echo -e "${GREEN}#${RESET} Docker service started successfully (snap).\\n"
+      else
         echo -e "${RED}#${RESET} Failed to start Docker. Please check the Docker service status and try again."
         exit 1
-      else
-        echo -e "${GREEN}#${RESET} Docker service started successfully.\\n"
       fi
-    else
-      echo -e "${GREEN}#${RESET} Docker service is already running.\\n"
+      # Verify Docker is actually responding
+      if ! docker info &> /dev/null; then
+        echo -e "${RED}#${RESET} Docker started but is not responding. Please check Docker status."
+        exit 1
+      fi
     fi
   fi
 }
