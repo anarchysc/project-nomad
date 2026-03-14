@@ -9,7 +9,7 @@ import { ZIM_STORAGE_PATH } from '../utils/fs.js'
 import { SERVICE_NAMES } from '../../constants/service_names.js'
 import { exec } from 'child_process'
 import { promisify } from 'util'
-// import { readdir } from 'fs/promises'
+import { readdir } from 'fs/promises'
 import KVStore from '#models/kv_store'
 import { BROADCAST_CHANNELS } from '../../constants/broadcast.js'
 
@@ -478,13 +478,49 @@ export class DockerService {
           this._broadcast(
             service.service_name,
             'gpu-config',
-            `AMD GPU detected. ROCm GPU acceleration is not yet supported in this version — proceeding with CPU-only configuration. GPU support for AMD will be available in a future update.`
+            `AMD GPU detected. Configuring container with ROCm GPU support...`
           )
-          logger.warn('[DockerService] AMD GPU detected but ROCm support is not yet enabled. Using CPU-only configuration.')
-          // TODO: Re-enable AMD GPU support once ROCm image and device discovery are validated.
-          // When re-enabling:
-          //   1. Switch image to 'ollama/ollama:rocm'
-          //   2. Restore _discoverAMDDevices() to map /dev/kfd and /dev/dri/* into the container
+          logger.info('[DockerService] AMD GPU detected. Switching to ROCm image and mapping GPU devices.')
+
+          // Switch to ROCm-enabled Ollama image
+          finalImage = 'ollama/ollama:rocm'
+
+          // Pull the ROCm image if not already available
+          const rocmImageExists = await this._checkImageExists(finalImage)
+          if (!rocmImageExists) {
+            this._broadcast(
+              service.service_name,
+              'pulling',
+              `Pulling ROCm-enabled Docker image ${finalImage}...`
+            )
+            const rocmPullStream = await this.docker.pull(finalImage)
+            await new Promise((res) => this.docker.modem.followProgress(rocmPullStream, res))
+          }
+
+          // Discover and map AMD GPU devices
+          const amdDevices = await this._discoverAMDDevices()
+          if (amdDevices.length > 0) {
+            gpuHostConfig = {
+              ...gpuHostConfig,
+              Devices: [
+                ...(gpuHostConfig.Devices || []),
+                ...amdDevices,
+              ],
+              GroupAdd: ['video', 'render'],
+            }
+            this._broadcast(
+              service.service_name,
+              'gpu-config',
+              `Mapped ${amdDevices.length} AMD GPU devices for ROCm acceleration.`
+            )
+          } else {
+            logger.warn('[DockerService] AMD GPU detected but no /dev/kfd or /dev/dri devices found. Proceeding without GPU passthrough.')
+            this._broadcast(
+              service.service_name,
+              'gpu-config',
+              `Warning: AMD GPU detected but device nodes not found. Running without GPU acceleration.`
+            )
+          }
         } else if (gpuResult.toolkitMissing) {
           this._broadcast(
             service.service_name,
@@ -740,57 +776,57 @@ export class DockerService {
    * Discover AMD GPU DRI devices dynamically.
    * Returns an array of device configurations for Docker.
    */
-  // private async _discoverAMDDevices(): Promise<
-  //   Array<{ PathOnHost: string; PathInContainer: string; CgroupPermissions: string }>
-  // > {
-  //   try {
-  //     const devices: Array<{
-  //       PathOnHost: string
-  //       PathInContainer: string
-  //       CgroupPermissions: string
-  //     }> = []
+  private async _discoverAMDDevices(): Promise<
+    Array<{ PathOnHost: string; PathInContainer: string; CgroupPermissions: string }>
+  > {
+    try {
+      const devices: Array<{
+        PathOnHost: string
+        PathInContainer: string
+        CgroupPermissions: string
+      }> = []
 
-  //     // Always add /dev/kfd (Kernel Fusion Driver)
-  //     devices.push({
-  //       PathOnHost: '/dev/kfd',
-  //       PathInContainer: '/dev/kfd',
-  //       CgroupPermissions: 'rwm',
-  //     })
+      // Always add /dev/kfd (Kernel Fusion Driver)
+      devices.push({
+        PathOnHost: '/dev/kfd',
+        PathInContainer: '/dev/kfd',
+        CgroupPermissions: 'rwm',
+      })
 
-  //     // Discover DRI devices in /dev/dri/
-  //     try {
-  //       const driDevices = await readdir('/dev/dri')
-  //       for (const device of driDevices) {
-  //         const devicePath = `/dev/dri/${device}`
-  //         devices.push({
-  //           PathOnHost: devicePath,
-  //           PathInContainer: devicePath,
-  //           CgroupPermissions: 'rwm',
-  //         })
-  //       }
-  //       logger.info(
-  //         `[DockerService] Discovered ${driDevices.length} DRI devices: ${driDevices.join(', ')}`
-  //       )
-  //     } catch (error) {
-  //       logger.warn(`[DockerService] Could not read /dev/dri directory: ${error.message}`)
-  //       // Fallback to common device names if directory read fails
-  //       const fallbackDevices = ['card0', 'renderD128']
-  //       for (const device of fallbackDevices) {
-  //         devices.push({
-  //           PathOnHost: `/dev/dri/${device}`,
-  //           PathInContainer: `/dev/dri/${device}`,
-  //           CgroupPermissions: 'rwm',
-  //         })
-  //       }
-  //       logger.info(`[DockerService] Using fallback DRI devices: ${fallbackDevices.join(', ')}`)
-  //     }
+      // Discover DRI devices in /dev/dri/
+      try {
+        const driDevices = await readdir('/dev/dri')
+        for (const device of driDevices) {
+          const devicePath = `/dev/dri/${device}`
+          devices.push({
+            PathOnHost: devicePath,
+            PathInContainer: devicePath,
+            CgroupPermissions: 'rwm',
+          })
+        }
+        logger.info(
+          `[DockerService] Discovered ${driDevices.length} DRI devices: ${driDevices.join(', ')}`
+        )
+      } catch (error) {
+        logger.warn(`[DockerService] Could not read /dev/dri directory: ${error.message}`)
+        // Fallback to common device names if directory read fails
+        const fallbackDevices = ['card0', 'renderD128']
+        for (const device of fallbackDevices) {
+          devices.push({
+            PathOnHost: `/dev/dri/${device}`,
+            PathInContainer: `/dev/dri/${device}`,
+            CgroupPermissions: 'rwm',
+          })
+        }
+        logger.info(`[DockerService] Using fallback DRI devices: ${fallbackDevices.join(', ')}`)
+      }
 
-  //     return devices
-  //   } catch (error) {
-  //     logger.error(`[DockerService] Error discovering AMD devices: ${error.message}`)
-  //     return []
-  //   }
-  // }
+      return devices
+    } catch (error) {
+      logger.error(`[DockerService] Error discovering AMD devices: ${error.message}`)
+      return []
+    }
+  }
 
   /**
    * Update a service container to a new image version while preserving volumes and data.
